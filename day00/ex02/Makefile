@@ -3,20 +3,21 @@ RM =	/bin/rm
 MAKE =	/usr/bin/make
 MKDIR =	/bin/mkdir
 
-NAME = megaphone
+NAME = account
 
 ROOT =		$(shell /bin/pwd)
 OPATH =		$(ROOT)/objs
 CPATH =		$(ROOT)/srcs
+HPATH =		$(ROOT)/includes
 
-CPPFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -I $(HPATH)
 
-SRC = megaphone.cpp
+SRC = tests.cpp \
+	  Account.class.cpp
 
+OFILES = $(patsubst %.cpp, $(OPATH)/%.o, $(SRC))
 
-OFILES = $(patsubst %.cpp, $(OPATH)/%.opp, $(SRC))
-
-.PHONY: all clean re fclean
+.PHONY: all clean fclean re
 
 all: $(OPATH) $(NAME)
 
@@ -26,7 +27,7 @@ $(NAME): $(OFILES)
 	@$(CC) $(CFLAGS) -o $@ $^
 	@echo "\033[36mAll is done!\033[0m"
 
-$(OPATH)/%.opp: $(CPATH)/%.cpp
+$(OPATH)/%.o: $(CPATH)/%.cpp
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OPATH):
@@ -43,7 +44,6 @@ fclean: clean
 	@echo "\033[36mAll clear!\033[0m"
 
 re: fclean all
-
 
 # lil memo
 # $@ = rule's name
